@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,5 +64,48 @@ public class ServerController {
 		ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().data(dtos).build();
 		
 		return ResponseEntity.ok().body(response);
+	}
+	
+	@GetMapping("/update")
+	public ResponseEntity<?>update(@RequestBody ServerDTO dto) {
+		try {
+			ServerEntity entity = ServerDTO.toEntity(dto);
+			
+			entity.setUserId("temporary-user");
+			
+			Optional<ServerEntity> entities = service.update(entity);
+			
+			List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
+			
+			ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().data(dtos).build();
+			
+			return ResponseEntity.ok().body(response);
+		} catch (Exception e) {
+			String error = e.getMessage();
+			ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().error(error).build();
+			
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
+	@PutMapping
+	public ResponseEntity<?> updateTodo(@RequestBody ServerDTO dto) {
+		try {
+			ServerEntity entity = ServerDTO.toEntity(dto);
+			
+			entity.setUserId("temporary-user");
+			
+			Optional<ServerEntity> entities = service.updateTodo(entity);
+			
+			List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
+			
+			ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().data(dtos).build();
+			
+			return ResponseEntity.ok().body(response);
+		} catch (Exception e) {
+			String error = e.getMessage();
+			ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().error(error).build();
+			return ResponseEntity.badRequest().body(response);
+		}
 	}
 }

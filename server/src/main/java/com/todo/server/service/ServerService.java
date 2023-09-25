@@ -28,6 +28,31 @@ public class ServerService {
 		return repository.findByUserId(userId);
 	}
 	
+	public Optional<ServerEntity>update(final ServerEntity entity) {
+		validate(entity);
+		if (repository.existsById(entity.getId())) {
+			repository.save(entity);
+		}
+		else
+			throw new RuntimeException("Unknown id");
+		
+		return repository.findById(entity.getId());
+	}
+	
+	public Optional<ServerEntity>updateTodo(final ServerEntity entity) {
+		validate(entity);
+		
+		final Optional<ServerEntity> original = repository.findById(entity.getId());
+		
+		original.ifPresent(todo -> {
+			todo.setTitle(entity.getTitle());
+			todo.setDone(entity.isDone());
+			repository.save(todo);
+		});
+		
+		return repository.findById(entity.getId());
+	}
+	
 	public void validate(final ServerEntity entity) {
 		if(entity == null) {
 			log.warn("Entity cannot be null.");
