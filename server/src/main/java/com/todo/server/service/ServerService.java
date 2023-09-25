@@ -1,5 +1,6 @@
 package com.todo.server.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,10 @@ public class ServerService {
 		validate(entity);
 		repository.save(entity);
 		return repository.findById(entity.getId());
+	}
+	
+	public List<ServerEntity>retrieve(final String userId) {
+		return repository.findByUserId(userId);
 	}
 	
 	public void validate(final ServerEntity entity) {
