@@ -40,7 +40,7 @@ public class ServerController {
 			
 			entity.setUserId("temporary-userid");
 			
-			Optional<ServerEntity> entities = service.create(entity);
+			List<ServerEntity> entities = service.create(entity);
 			log.info("Log: service.create ok!");
 			
 			List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
@@ -75,7 +75,7 @@ public class ServerController {
 			
 			entity.setUserId("temporary-user");
 			
-			Optional<ServerEntity> entities = service.update(entity);
+			List<ServerEntity> entities = service.update(entity);
 			
 			List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
 			
@@ -97,7 +97,7 @@ public class ServerController {
 			
 			entity.setUserId("temporary-user");
 			
-			Optional<ServerEntity> entities = service.updateTodo(entity);
+			List<ServerEntity> entities = service.update(entity);
 			
 			List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
 			
@@ -114,12 +114,14 @@ public class ServerController {
 	@DeleteMapping
 	public ResponseEntity<?> delete(@RequestBody ServerDTO dto) {
 		try {
-			List<String> message = new ArrayList<>();
+			ServerEntity entity = ServerDTO.toEntity(dto);
+
+			List<ServerEntity> entities = service.delete(entity);
 			
-			String msg = service.delete(dto.getId());
-			message.add(msg);
+			List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
 			
-			ResponseDTO<String> response = ResponseDTO.<String>builder().data(message).build();
+			ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().data(dtos).build();
+			
 			return ResponseEntity.ok().body(response);
 		} catch (Exception e) {
 			String error = e.getMessage();

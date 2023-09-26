@@ -18,17 +18,17 @@ public class ServerService {
 	@Autowired
 	private ServerRepository repository;
 	
-	public Optional<ServerEntity> create(final ServerEntity entity) {
+	public List<ServerEntity> create(final ServerEntity entity) {
 		validate(entity);
 		repository.save(entity);
-		return repository.findById(entity.getId());
+		return repository.findByUserId(entity.getUserId());
 	}
 	
-	public List<ServerEntity>retrieve(final String userId) {
+	public List<ServerEntity> retrieve(final String userId) {
 		return repository.findByUserId(userId);
 	}
 	
-	public Optional<ServerEntity>update(final ServerEntity entity) {
+	public List<ServerEntity> update(final ServerEntity entity) {
 		validate(entity);
 		if (repository.existsById(entity.getId())) {
 			repository.save(entity);
@@ -36,29 +36,16 @@ public class ServerService {
 		else
 			throw new RuntimeException("Unknown id");
 		
-		return repository.findById(entity.getId());
+		return repository.findByUserId(entity.getUserId());
 	}
 	
-	public Optional<ServerEntity>updateTodo(final ServerEntity entity) {
-		validate(entity);
-		
-		final Optional<ServerEntity> original = repository.findById(entity.getId());
-		
-		original.ifPresent(todo -> {
-			todo.setTitle(entity.getTitle());
-			todo.setDone(entity.isDone());
-			repository.save(todo);
-		});
-		
-		return repository.findById(entity.getId());
-	}
-	
-	public String delete(final String id) {
-		if(repository.existsById(id))
-			repository.deleteById(id);
+	public List<ServerEntity> delete(final ServerEntity entity) {
+		if(repository.existsById(entity.getId()))
+			repository.deleteById(entity.getId());
 		else
 			throw new RuntimeException("id does not exist");
-		return "Deleted";
+		
+		return repository.findByUserId(entity.getUserId());
 	}
 	
 	public void validate(final ServerEntity entity) {
