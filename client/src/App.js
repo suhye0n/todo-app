@@ -27,8 +27,16 @@ class App extends React.Component {
     item.id = "ID-" + thisItems.length;
     item.done = false;
     thisItems.push(item);
-    this.setState({items:thisItems});
+    this.setState({ items: thisItems });
     console.log("items:", this.state.items);
+  }
+
+  delete = (item) => {
+    const thisItems = this.state.items;
+    const newItems = thisItems.filter(e => e.id !== item.id);
+    this.setState({ items: newItems }, () => {
+      console.log("Update Items:", this.state.items)
+    });
   }
 
   render() {
@@ -36,7 +44,7 @@ class App extends React.Component {
       <Paper style={{ margin: 16 }}>
         <List>
           {this.state.items.map((item, idx) => (
-            <Todo item={item} key={item.id} />
+            <Todo item={item} key={item.id} delete={this.delete} />
           ))}
         </List>
       </Paper>
@@ -47,7 +55,7 @@ class App extends React.Component {
         <Container maxWidth='md'>
           <AddTodo add={this.add} />
           <div className='TodoList'>{todoItems}</div>
-          </Container>
+        </Container>
       </div>
     )
   }
