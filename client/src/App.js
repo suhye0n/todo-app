@@ -5,6 +5,14 @@ import DeleteTodo from './DeleteTodo';
 import { Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography } from "@material-ui/core";
 import './App.css';
 import { call, signout } from './service/ApiService';
+import styled from "styled-components";
+
+const StyledAppBar = styled(AppBar)`
+  && {
+    background-color: #fff;
+    color: #757575
+  }
+`;
 
 function App() {
     const [items, setItems] = useState([]);
@@ -56,18 +64,19 @@ function App() {
     );
 
     const navigationBar = (
-        <AppBar position="static">
+        <StyledAppBar position="static">
             <Toolbar>
                 <Grid justifyContent="space-between" container>
                     <Grid item>
                         <Typography variant="h6">오늘의 할일</Typography>
                     </Grid>
                     <Grid item>
-                        <Button color="inherit" onClick={signout}>logout</Button>
+                        <Button color="inherit">마이페이지</Button>
+                        <Button color="inherit" onClick={signout}>로그아웃</Button>
                     </Grid>
                 </Grid>
             </Toolbar>
-        </AppBar>
+        </StyledAppBar>
     );
 
     return (

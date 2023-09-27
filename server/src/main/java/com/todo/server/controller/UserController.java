@@ -44,7 +44,7 @@ public class UserController {
 					.username(registeredUser.getUsername())
 					.build();
 			return ResponseEntity.ok().body(responseUserDTO);
-		}catch(Exception e) {
+		} catch(Exception e) {
 			ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
 			return ResponseEntity.badRequest().body(responseDTO);
 		}

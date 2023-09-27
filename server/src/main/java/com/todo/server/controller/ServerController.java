@@ -126,7 +126,7 @@ public class ServerController {
             ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().data(dtos).build();
 
             return ResponseEntity.ok().body(response);
-        }catch(Exception e){
+        } catch(Exception e){
             String error = e.getMessage();
             ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().error(error).build();
             return ResponseEntity.badRequest().body(response);
