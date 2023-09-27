@@ -36,3 +36,35 @@ export const call = async (api, method, request) => {
         throw error;
     }
 }
+
+export const signin = async userDTO => {
+    const response = await call("/auth/signin", "POST", userDTO);
+
+    if (response.token) {
+        localStorage.setItem(ACCESS_TOKEN, response.token);
+        window.location.href = "/";
+    }
+}
+
+export const signup = async userDTO => {
+    try {
+        const response = await call("/auth/signup", "POST", userDTO);
+
+        if (response.id) {
+            window.location.href = "/";
+        }
+    } catch (error) {
+        console.error("Oops!", error.status, "Ooops!");
+
+        if (error.status === 403) {
+            window.location.href = "/auth/signup";
+        }
+
+        throw error;
+    }
+}
+
+export const signout = () => {
+    localStorage.removeItem(ACCESS_TOKEN);
+    window.location.href = "/";
+}
