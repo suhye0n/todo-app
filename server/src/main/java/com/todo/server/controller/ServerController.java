@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,14 +32,15 @@ public class ServerController {
 	private ServerService service;
 	
 	@PostMapping
-	public ResponseEntity<?> createTodo(@RequestBody ServerDTO dto) {
+	public ResponseEntity<?> createTodo(@AuthenticationPrincipal String userId, @RequestBody ServerDTO dto) {
 		try {
 			log.info("Log: create Todo entrance");
 			
 			ServerEntity entity = ServerDTO.toEntity(dto);
 			log.info("Log:dto => entity ok!");
-			
-			entity.setUserId("temporary-user");
+
+			entity.setId(null);
+			entity.setUserId(userId);
 			
 			List<ServerEntity> entities = service.create(entity);
 			log.info("Log: service.create ok!");
@@ -58,9 +60,8 @@ public class ServerController {
 	}
 		
 	@GetMapping
-	public ResponseEntity<?> retrieveTodoList() {
-		String temporaryUserId = "temporary-user";
-		List<ServerEntity> entities = service.retrieve(temporaryUserId);
+	public ResponseEntity<?> retrieveTodoList(@AuthenticationPrincipal String userId) {
+		List<ServerEntity> entities = service.retrieve(userId);
 		List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
 		
 		ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().data(dtos).build();
@@ -69,11 +70,11 @@ public class ServerController {
 	}
 	
 	@GetMapping("/update")
-	public ResponseEntity<?>update(@RequestBody ServerDTO dto) {
+	public ResponseEntity<?>update(@AuthenticationPrincipal String userId, @RequestBody ServerDTO dto) {
 		try {
 			ServerEntity entity = ServerDTO.toEntity(dto);
 			
-			entity.setUserId("temporary-user");
+			entity.setUserId(userId);
 			
 			List<ServerEntity> entities = service.update(entity);
 			
@@ -91,11 +92,11 @@ public class ServerController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> updateTodo(@RequestBody ServerDTO dto) {
+	public ResponseEntity<?> updateTodo(@AuthenticationPrincipal String userId, @RequestBody ServerDTO dto) {
 		try {
 			ServerEntity entity = ServerDTO.toEntity(dto);
 			
-			entity.setUserId("temporary-user");
+			entity.setUserId(userId);
 			
 			List<ServerEntity> entities = service.update(entity);
 			
@@ -112,11 +113,11 @@ public class ServerController {
 	}
 	
 	@DeleteMapping
-    public ResponseEntity<?> deleteTodo(@RequestBody ServerDTO dto){
+    public ResponseEntity<?> deleteTodo(@AuthenticationPrincipal String userId, @RequestBody ServerDTO dto){
         try {
         	ServerEntity entity = ServerDTO.toEntity(dto);
 			
-			entity.setUserId("temporary-user");
+        	entity.setUserId(userId);
 
             List<ServerEntity> entities = service.delete(entity);
 
