@@ -38,7 +38,7 @@ public class ServerController {
 			ServerEntity entity = ServerDTO.toEntity(dto);
 			log.info("Log:dto => entity ok!");
 			
-			entity.setUserId("temporary-userid");
+			entity.setUserId("temporary-user");
 			
 			List<ServerEntity> entities = service.create(entity);
 			log.info("Log: service.create ok!");
@@ -112,22 +112,24 @@ public class ServerController {
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<?> delete(@RequestBody ServerDTO dto) {
-		try {
-			ServerEntity entity = ServerDTO.toEntity(dto);
+    public ResponseEntity<?> deleteTodo(@RequestBody ServerDTO dto){
+        try {
+        	ServerEntity entity = ServerDTO.toEntity(dto);
+			
+			entity.setUserId("temporary-user");
 
-			List<ServerEntity> entities = service.delete(entity);
-			
-			List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
-			
-			ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().data(dtos).build();
-			
-			return ResponseEntity.ok().body(response);
-		} catch (Exception e) {
-			String error = e.getMessage();
-			ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().error(error).build();
-			
-			return ResponseEntity.badRequest().body(response);
-		}
-	}
+            List<ServerEntity> entities = service.delete(entity);
+
+            List<ServerDTO> dtos = entities.stream().map(ServerDTO::new).collect(Collectors.toList());
+
+            ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().data(dtos).build();
+
+            return ResponseEntity.ok().body(response);
+        }catch(Exception e){
+            String error = e.getMessage();
+            ResponseDTO<ServerDTO> response = ResponseDTO.<ServerDTO>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+
+    }
 }
