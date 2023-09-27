@@ -45,20 +45,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors()
-			.and()
-			.csrf()
-				.disable()
-			.httpBasic()
-				.disable()
-			.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.authorizeRequests()
-				.antMatchers("/","/auth/**","/h2-console/**").permitAll()
-				.anyRequest()
-				.authenticated()
-			.and()
-			.headers().frameOptions().disable();
+		.and()
+		.csrf()
+		.disable()
+		.httpBasic()
+		.disable()
+		.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		.authorizeRequests()
+		.antMatchers("/","/auth/**","/h2-console/**").permitAll()
+		.anyRequest()
+		.authenticated()
+		.and()
+		.headers().frameOptions().disable();
 
 		http.exceptionHandling()
 		.authenticationEntryPoint((request, response, e)  ->

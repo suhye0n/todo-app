@@ -17,6 +17,8 @@ const StyledAppBar = styled(AppBar)`
 function App() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     const add = (item) => {
         call("/todo", "POST", item).then((response) =>
@@ -53,6 +55,12 @@ function App() {
         });
     }, []);
 
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+
+    const pageNumbers = [];
+    
     const todoItems = items.length > 0 && (
         <Paper style={{ margin: 16 }}>
             <List>
@@ -62,6 +70,10 @@ function App() {
             </List>
         </Paper>
     );
+    
+    for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
+        pageNumbers.push(i);
+    }
 
     const navigationBar = (
         <StyledAppBar position="static">
@@ -88,7 +100,22 @@ function App() {
                     {navigationBar}
                     <Container maxWidth="md">
                         <AddTodo add={add} />
-                        <div className="TodoList">{todoItems}</div>
+                        <div className="TodoList">
+                            <Paper style={{ margin: 16 }}>
+                                <List>
+                                    {currentItems.map((item) => (
+                                        <Todo item={item} key={item.id} delete={deleteItem} update={update} />
+                                    ))}
+                                </List>
+                            </Paper>
+                            <div>
+                                {pageNumbers.map(num => (
+                                    <Button key={num} onClick={() => setCurrentPage(num)}>
+                                        {num}
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
                     </Container>
                     <DeleteTodo deleteForCompleted={deleteForCompleted} />
                 </div>
