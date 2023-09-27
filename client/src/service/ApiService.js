@@ -1,23 +1,38 @@
 import { API_BASE_URL } from "../app-config";
 
-export async function call(api, method, request) {
+const ACCESS_TOKEN = "ACCESS_TOKEN";
+
+export const call = async (api, method, request) => {
+    const headers = new Headers({
+        "Content-Type": "application/json",
+    });
+
+    const accessToken = localStorage.getItem(ACCESS_TOKEN);
+    if (accessToken) {
+        headers.append("Authorization", `Bearer ${accessToken}`);
+    }
+
     const options = {
-        headers: {
-            "Content-Type": "application/json",
-        },
-        method: method,
+        headers,
+        url: `${API_BASE_URL}${api}`,
+        method,
+        ...(request && { body: JSON.stringify(request) })
     };
 
-    if (request) {
-        options.body = JSON.stringify(request);
+    try {
+        const response = await fetch(options.url, options);
+        const json = await response.json();
+
+        if (!response.ok) throw json;
+
+        return json;
+    } catch (error) {
+        console.error("Oops!", error.status, "Ooops!");
+
+        if (error.status === 403) {
+            window.location.href = "/login";
+        }
+
+        throw error;
     }
-
-    const response = await fetch(API_BASE_URL + api, options);
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw data;
-    }
-
-    return data;
 }
