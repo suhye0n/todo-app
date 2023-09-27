@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
 import DeleteTodo from './DeleteTodo';
-import { Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography } from "@material-ui/core";
+import { Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography, InputBase } from "@material-ui/core";
+import SearchIcon from '@material-ui/icons/Search';
 import './App.css';
 import { call, signout } from './service/ApiService';
 import styled from "styled-components";
@@ -18,6 +19,7 @@ function App() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
     const itemsPerPage = 5;
 
     const add = (item) => {
@@ -57,23 +59,26 @@ function App() {
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = items.filter(item => item.title.includes(searchTerm))
+        .slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalFilteredItems = items.filter(item => item.title.includes(searchTerm)).length;
+    const firstPages = 1;
+    const totalPages = Math.ceil(totalFilteredItems / itemsPerPage);
 
     const pageNumbers = [];
-    
-    const todoItems = items.length > 0 && (
-        <Paper style={{ margin: 16 }}>
-            <List>
-                {items.map((item) => (
-                    <Todo item={item} key={item.id} delete={deleteItem} update={update} />
-                ))}
-            </List>
-        </Paper>
-    );
-    
-    for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
-        pageNumbers.push(i);
-    }
+
+    const nextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prev => prev + 1);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
+    };
 
     const navigationBar = (
         <StyledAppBar position="static">
@@ -83,6 +88,12 @@ function App() {
                         <Typography variant="h6">오늘의 할일</Typography>
                     </Grid>
                     <Grid item>
+                        <InputBase
+                            placeholder="Search…"
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                            startAdornment={<SearchIcon />}
+                        />
                         <Button color="inherit">마이페이지</Button>
                         <Button color="inherit" onClick={signout}>로그아웃</Button>
                     </Grid>
@@ -90,6 +101,10 @@ function App() {
             </Toolbar>
         </StyledAppBar>
     );
+
+    for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
+        pageNumbers.push(i);
+    }
 
     return (
         <div className="App">
@@ -108,12 +123,16 @@ function App() {
                                     ))}
                                 </List>
                             </Paper>
-                            <div>
+                            <div className="PaginationButtons">
+                                <Button onClick={() => setCurrentPage(firstPages)}>처음 페이지</Button>
+                                <Button onClick={prevPage}>이전</Button>
                                 {pageNumbers.map(num => (
                                     <Button key={num} onClick={() => setCurrentPage(num)}>
                                         {num}
                                     </Button>
                                 ))}
+                                <Button onClick={nextPage}>다음</Button>
+                                <Button onClick={() => setCurrentPage(totalPages)}>마지막 페이지</Button>
                             </div>
                         </div>
                     </Container>
