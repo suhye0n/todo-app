@@ -26,9 +26,9 @@ function Todo({ item: initialItem, delete: deleteTodo, update }) {
     }, []);
 
     const checkboxEventHandler = useCallback(() => {
-        setItem(prevItem => ({ ...prevItem, done: !prevItem.done }));
-        setReadOnly(true);
-        update(item);
+        const updatedItem = { ...item, done: !item.done };
+        setItem(updatedItem);
+        update(updatedItem);
     }, [item, update]);
 
     return (
