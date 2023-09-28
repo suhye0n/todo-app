@@ -42,7 +42,11 @@ const StyledMenuItem = styled(MenuItem)`
   && {
     background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
     color: ${({ darkMode }) => darkMode ? "#fff" : "#757575"};
-    
+
+    ul {
+      background-color: #333 !important;
+    }
+
     &:hover {
       background-color: ${({ darkMode }) => darkMode ? "#444" : "#e0e0e0"};
     }
