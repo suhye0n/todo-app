@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
 import DeleteTodo from './DeleteTodo';
-import { Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography, InputBase } from "@material-ui/core";
+import { Select, MenuItem, Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography, InputBase } from "@material-ui/core";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import SearchIcon from '@material-ui/icons/Search';
 import './App.css';
@@ -13,6 +13,12 @@ const StyledAppBar = styled(AppBar)`
   && {
     background-color: #fff;
     color: #757575
+  }
+`;
+
+const StyledSelect = styled(Select)`
+  && {
+    padding: 0 30px 0 10px;
   }
 `;
 
@@ -44,12 +50,15 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
+    const [sortOrder, setSortOrder] = useState('중요순');
+    const importanceOrder = ["상", "중", "하", "x"];
     const itemsPerPage = 5;
 
     const add = (item) => {
-        call("/todo", "POST", item).then((response) =>
-            setItems(response.data)
-        );
+        call("/todo", "POST", item).then((response) => {
+            const sortedData = sortData(response.data);
+            setItems(sortedData);
+        });
     }
 
     const deleteItem = (item) => {
@@ -73,12 +82,35 @@ function App() {
             }
         });
     }
-    
+
     const calculateProgress = () => {
         const completedTasks = items.filter(item => item.done).length;
         const totalTasks = items.length;
         return (completedTasks / totalTasks) * 100;
-    }    
+    }
+    
+    const sortData = (data) => {
+        let sortedItems = [...data];
+    
+        switch (sortOrder) {
+            case "중요순":
+                sortedItems.sort((a, b) => importanceOrder.indexOf(a.importance) - importanceOrder.indexOf(b.importance));
+                break;
+            case "제목순":
+                sortedItems.sort((a, b) => a.title.localeCompare(b.title));
+                break;
+            default:
+                sortedItems.sort((a, b) => importanceOrder.indexOf(a.importance) - importanceOrder.indexOf(b.importance));
+                break;
+        }
+        
+        return sortedItems;
+    }  
+
+    useEffect(() => {
+        const sortedData = sortData(items);
+        setItems(sortedData);
+    }, [sortOrder, items]);    
 
     useEffect(() => {
         call("/todo", "GET", null).then((response) => {
@@ -136,9 +168,9 @@ function App() {
         </StyledAppBar>
     );
 
-    for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
+    for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
-    }
+    }    
 
     return (
         <div className="App">
@@ -147,9 +179,20 @@ function App() {
             ) : (
                 <div>
                     {navigationBar}
-                    
+
                     <Container maxWidth="md">
                         <AddTodo add={add} />
+                        <StyledSelect
+                            value={sortOrder}
+                            onChange={(e) => {
+                                setSortOrder(e.target.value);
+                                const sortedData = sortData(items);
+                                setItems(sortedData);
+                            }}
+                        >
+                            <MenuItem value="중요순">중요순</MenuItem>
+                            <MenuItem value="제목순">제목순</MenuItem>
+                        </StyledSelect>
                         <div className="TodoList">
                             <Paper style={{ margin: 16 }}>
                                 <div style={{ margin: "20px 0" }}>
@@ -158,7 +201,7 @@ function App() {
                                     </Typography>
                                     <LinearProgress variant="determinate" value={calculateProgress()} />
                                 </div>
-                                
+
                                 <List>
                                     {currentItems.map((item) => (
                                         <Todo item={item} key={item.id} delete={deleteItem} update={update} />

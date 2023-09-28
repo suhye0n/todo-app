@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { Typography, ListItem, ListItemText, InputBase, Checkbox, ListItemSecondaryAction, IconButton } from "@material-ui/core";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import styled from 'styled-components';
-import TwemojiComponent from './TwemojiComponent';
 
 const ImportanceIndicator = styled.span`
   display: inline-block;
