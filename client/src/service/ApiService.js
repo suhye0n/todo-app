@@ -73,14 +73,11 @@ export const signout = () => {
 }
 
 export const update = async userDTO => {
-    try {
-        const response = await call("/auth/update", "POST", userDTO);
+    const response = await call("/auth/update", "POST", userDTO);
 
-        if (response.status === 200) {
-            window.location.href ="/";
-        }
-    } catch (error) {
-        console.error(error.status);
+    if (response) {
+        console.log(response);
+        localStorage.setItem(username, response.username);
     }
 }
 

@@ -51,7 +51,7 @@ public class UserController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO) {
 	    try {
-	        UserEntity user = userService.getByCredentials(
+	        UserEntity user = userService.getUserByEmail(
 	                userDTO.getEmail(),
 	                userDTO.getPassword(),
 	                passwordEncoder);
@@ -77,20 +77,32 @@ public class UserController {
 	    }
 	}
 
+	@PostMapping("/update")
+	public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
+	    try {
+	        String userId = userService.getUser(userDTO.getEmail().toString()).getId();
 
-    @PostMapping("/update")
-    public void edit_information(@RequestBody UserDTO userDTO) {
-            String before_userId = userService.getUser(userDTO.getEmail().toString()).getId();
+	        UserEntity updatedUser = UserEntity.builder()
+	                .id(userId)
+	                .email(userDTO.getEmail())
+	                .username(userDTO.getUsername())
+	                .password(passwordEncoder.encode(userDTO.getPassword()))
+	                .build();
 
-            UserEntity update_user = UserEntity.builder()
-                    .id(before_userId)
-                    .email(userDTO.getEmail())
-                    .username(userDTO.getUsername())
-                    .password(passwordEncoder.encode(userDTO.getPassword()))
-                    .build();
+	        userService.updateUser(updatedUser);
 
-            userService.updateUser(update_user);
-    }
+	        UserDTO responseUserDTO = UserDTO.builder()
+	                .email(updatedUser.getEmail())
+	                .id(updatedUser.getId())
+	                .username(updatedUser.getUsername())
+	                .build();
+
+	        return ResponseEntity.ok().body(responseUserDTO);
+	    } catch (Exception e) {
+	        ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+	        return ResponseEntity.badRequest().body(responseDTO);
+	    }
+	}
 
 	@DeleteMapping("/withdrawal")
 	public ResponseEntity<?> deleteUser(@RequestBody UserDTO userDTO) {
