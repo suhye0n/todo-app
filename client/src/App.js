@@ -45,12 +45,18 @@ const StyledSearchIcon = styled(SearchIcon)`
     color: #757575;
 `;
 
+const ActiveButton = styled(Button)`
+  && {
+    background-color: #f5f5f5;
+  }
+`;
+
 function App() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    const [sortOrder, setSortOrder] = useState('중요순');
+    const [sortOrder, setSortOrder] = useState('기본순');
     const importanceOrder = ["상", "중", "하", "x"];
     const itemsPerPage = 5;
 
@@ -58,6 +64,7 @@ function App() {
         call("/todo", "POST", item).then((response) => {
             const sortedData = sortData(response.data);
             setItems(sortedData);
+            setCurrentPage(totalPages);
         });
     }
 
@@ -93,19 +100,23 @@ function App() {
         let sortedItems = [...data];
     
         switch (sortOrder) {
+            case "기본순":
+                return sortedItems;  
             case "중요순":
                 sortedItems.sort((a, b) => importanceOrder.indexOf(a.importance) - importanceOrder.indexOf(b.importance));
                 break;
             case "제목순":
                 sortedItems.sort((a, b) => a.title.localeCompare(b.title));
                 break;
-            default:
-                sortedItems.sort((a, b) => importanceOrder.indexOf(a.importance) - importanceOrder.indexOf(b.importance));
+            case "마감일순":
+                sortedItems.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
                 break;
+            default:
+                return sortedItems;
         }
-        
+    
         return sortedItems;
-    }  
+    }    
 
     useEffect(() => {
         const sortedData = sortData(items);
@@ -190,9 +201,12 @@ function App() {
                                 setItems(sortedData);
                             }}
                         >
+                            <MenuItem value="기본순">기본순</MenuItem>
                             <MenuItem value="중요순">중요순</MenuItem>
                             <MenuItem value="제목순">제목순</MenuItem>
+                            <MenuItem value="마감일순">마감일순</MenuItem>
                         </StyledSelect>
+
                         <div className="TodoList">
                             <Paper style={{ margin: 16 }}>
                                 <div style={{ margin: "20px 0" }}>
@@ -209,15 +223,21 @@ function App() {
                                 </List>
                             </Paper>
                             <div className="PaginationButtons">
-                                <Button onClick={() => setCurrentPage(firstPages)}>처음 페이지</Button>
-                                <Button onClick={prevPage}>이전</Button>
+                                <Button onClick={() => setCurrentPage(firstPages)}>«</Button>
+                                <Button onClick={prevPage}>‹</Button>
                                 {pageNumbers.map(num => (
-                                    <Button key={num} onClick={() => setCurrentPage(num)}>
-                                        {num}
-                                    </Button>
+                                    num === currentPage ? (
+                                        <ActiveButton key={num} onClick={() => setCurrentPage(num)}>
+                                            {num}
+                                        </ActiveButton>
+                                    ) : (
+                                        <Button key={num} onClick={() => setCurrentPage(num)}>
+                                            {num}
+                                        </Button>
+                                    )
                                 ))}
-                                <Button onClick={nextPage}>다음</Button>
-                                <Button onClick={() => setCurrentPage(totalPages)}>마지막 페이지</Button>
+                                <Button onClick={nextPage}>›</Button>
+                                <Button onClick={() => setCurrentPage(totalPages)}>››</Button>
                             </div>
                         </div>
                     </Container>
