@@ -55,10 +55,14 @@ function App() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
     const [searchTerm, setSearchTerm] = useState("");
     const [sortOrder, setSortOrder] = useState('기본순');
     const importanceOrder = ["상", "중", "하", "x"];
-    const itemsPerPage = 5;
+    const [location, setLocation] = useState("");
+    const [weather, setWeather] = useState(null);
+    const [quote, setQuote] = useState(null);
+    const API_KEY = '3b0dad37b0a95472e4183882ade8a4b5'
 
     const add = (item) => {
         call("/todo", "POST", item).then((response) => {
@@ -95,13 +99,13 @@ function App() {
         const totalTasks = items.length;
         return (completedTasks / totalTasks) * 100;
     }
-    
+
     const sortData = (data) => {
         let sortedItems = [...data];
-    
+
         switch (sortOrder) {
             case "기본순":
-                return sortedItems;  
+                return sortedItems;
             case "중요순":
                 sortedItems.sort((a, b) => importanceOrder.indexOf(a.importance) - importanceOrder.indexOf(b.importance));
                 break;
@@ -114,38 +118,68 @@ function App() {
             default:
                 return sortedItems;
         }
-    
+
         return sortedItems;
     }
 
-    function Clock() {
-        const [time, setTime] = useState(new Date());
+    const getWeather = async (latitude, longitude) => {
+        try {
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric&lang=kr`);
     
+            if (!response.ok) {
+                throw new Error("날씨 정보를 가져오는데 실패했습니다.");
+            }
+    
+            const data = await response.json();
+            setLocation(data.name);
+            setWeather(data);
+    
+        } catch (error) {
+            console.error("날씨 정보를 가져오는데 실패했습니다.", error);
+        }
+    };    
+
+    const getRandomQuote = async () => {
+        try {
+            const response = await axios.get("https://api.quotable.io/random");
+            setQuote(response.data);
+        } catch (error) {
+            console.error("명언을 가져오는데 실패했습니다.", error);
+        }
+    };
+
+    const Clock = () => {
+        const [time, setTime] = useState(new Date());
+
         useEffect(() => {
             const intervalId = setInterval(() => {
                 setTime(new Date());
             }, 1000);
-    
+
             return () => {
                 clearInterval(intervalId);
             };
         }, []);
-    
+
         const formattedTime = time.toLocaleTimeString();
-    
+
         return <span>{formattedTime}</span>;
     }
 
     useEffect(() => {
         const sortedData = sortData(items);
         setItems(sortedData);
-    }, [sortOrder, items]);    
+    }, [sortOrder]);
 
     useEffect(() => {
         call("/todo", "GET", null).then((response) => {
             setItems(response.data);
             setLoading(false);
         });
+        navigator.geolocation.getCurrentPosition((position) => {
+          getWeather(position.coords.latitude, position.coords.longitude);
+        });
+        getRandomQuote();
     }, []);
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -199,7 +233,7 @@ function App() {
 
     for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
-    }    
+    }
 
     return (
         <div className="App">
@@ -210,6 +244,18 @@ function App() {
                     {navigationBar}
 
                     <div style={{ fontSize: 30, marginTop: 80, marginBottom: 50 }}> <Clock /> </div>
+                    {weather && (
+                        <div>
+                            <img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} alt="날씨 아이콘" />
+                            <p>현재 위치: {location}</p>
+                            <p>
+                                온도: {weather.main.temp}°C,
+                                날씨: {weather.weather[0].description}
+                            </p>
+                        </div>
+                    )}
+
+                    {quote && <div>"{quote.content}" - {quote.author}</div>}
 
                     <Container maxWidth="md">
                         <AddTodo add={add} />
