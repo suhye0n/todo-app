@@ -1,7 +1,22 @@
 import React, { useState, useCallback } from 'react';
 import { Typography, ListItem, ListItemText, InputBase, Checkbox, ListItemSecondaryAction, IconButton } from "@material-ui/core";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
+import { useDarkMode } from "./DarkModeContext";
 import styled from 'styled-components';
+
+const StyledListItem = styled(ListItem)`
+    background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
+    color: ${({ darkMode }) => darkMode ? "#e0e0e0" : "#333"};
+`;
+
+const StyledInputBase = styled(InputBase)`
+    background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
+    color: ${({ darkMode }) => darkMode ? "#e0e0e0" : "#333"};
+    
+    &::placeholder {
+        color: ${({ darkMode }) => darkMode ? "#888" : "#aaa"};
+    }
+`;
 
 const ImportanceIndicator = styled.span`
   display: inline-block;
@@ -36,6 +51,7 @@ const ImportanceIndicator = styled.span`
 function Todo({ item: initialItem, delete: deleteTodo, update }) {
     const [item, setItem] = useState(initialItem);
     const [readOnly, setReadOnly] = useState(true);
+    const { darkMode, setDarkMode } = useDarkMode();
 
     const deleteEventHandler = useCallback(() => {
         deleteTodo(item);
@@ -63,18 +79,19 @@ function Todo({ item: initialItem, delete: deleteTodo, update }) {
     }, [item, update]);
 
     return (
-        <ListItem>
+        <StyledListItem darkMode={darkMode}>
             <Checkbox
                 checked={item.done}
                 onChange={checkboxEventHandler}
             />
             <ListItemText>
-                <InputBase
+                <StyledInputBase
                     inputProps={{ "aria-label": "naked", readOnly: readOnly }}
                     type="text"
                     id={item.id}
                     name={item.id}
                     value={item.title}
+                    darkMode={darkMode}
                     multiline={true}
                     fullWidth={true}
                     onClick={offReadOnlyMode}
@@ -97,11 +114,12 @@ function Todo({ item: initialItem, delete: deleteTodo, update }) {
                     </ImportanceIndicator>
                 </Typography>
                 <IconButton aria-label="Delete"
+                    style={{marginLeft: 30}}
                     onClick={deleteEventHandler}>
                     <DeleteOutlined />
                 </IconButton>
             </ListItemSecondaryAction>
-        </ListItem>
+        </StyledListItem>
     );
 }
 

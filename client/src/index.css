@@ -11,13 +11,25 @@
 
 body {
   margin: 0;
-  font-family: 'Ramche';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: 'Ramche';
+body.light {
+  background-color: #fff;
+  color: #333;
 }
 
-img.emoji { width: 12px; vertical-align: middle; padding: 3px 0; }
+body.dark {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark ul, body.dark svg {
+  background-color: transparent;
+  color: #fff;
+}
+
+body.dark button:hover {
+  background-color: #444;
+}

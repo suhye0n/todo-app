@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
 import DeleteTodo from './DeleteTodo';
+import { useDarkMode } from "./DarkModeContext";
 import { Select, MenuItem, Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography, InputBase } from "@material-ui/core";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import SearchIcon from '@material-ui/icons/Search';
@@ -12,10 +13,15 @@ import mbxGeocoding from '@mapbox/mapbox-sdk/services/geocoding';
 
 const geocodingClient = mbxGeocoding({ accessToken: 'pk.eyJ1Ijoic3VoeWUwbiIsImEiOiJjbG4ycGNnNDEwYzJnMmtucmU0cHl5YTQzIn0.DJ559UUk37apuQv0jZdWMw' });
 
+const StyledPaper = styled(Paper)`
+    background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
+    color: ${({ darkMode }) => darkMode ? "#e0e0e0" : "#333"};
+`;
+
 const StyledAppBar = styled(AppBar)`
   && {
-    background-color: #fff;
-    color: #757575;
+    background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
+    color: ${({ darkMode }) => darkMode ? "#fff" : "#757575"};
     position: fixed;
     top: 0;
   }
@@ -24,6 +30,19 @@ const StyledAppBar = styled(AppBar)`
 const StyledSelect = styled(Select)`
   && {
     padding: 0 30px 0 10px;
+    background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
+    color: ${({ darkMode }) => darkMode ? "#fff" : "#757575"};
+  }
+`;
+
+const StyledMenuItem = styled(MenuItem)`
+  && {
+    background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
+    color: ${({ darkMode }) => darkMode ? "#fff" : "#757575"};
+    
+    &:hover {
+      background-color: ${({ darkMode }) => darkMode ? "#444" : "#e0e0e0"};
+    }
   }
 `;
 
@@ -37,6 +56,8 @@ const SearchContainer = styled.div`
 
 const StyledInputBase = styled(InputBase)`
     && {
+        background-color: ${({ darkMode }) => darkMode ? "#444" : "#fff"};
+        color: ${({ darkMode }) => darkMode ? "#fff" : "#757575"};
         padding-left: 40px;
         width: 100%;
     }
@@ -53,7 +74,34 @@ const StyledSearchIcon = styled(SearchIcon)`
 const ActiveButton = styled(Button)`
   && {
     background-color: #f5f5f5;
+
+    &:hover {
+        background-color: ${({ darkMode }) => darkMode ? "#444" : "#e0e0e0"};
+    }
+
+    &.active {
+        background-color: ${({ darkMode }) => darkMode ? "#444" : "#bdbdbd"};
+    }
   }
+`;
+
+const PagingContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+`;
+
+const PagingButton = styled(Button)`
+    background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
+    color: ${({ darkMode }) => darkMode ? "#fff" : "#757575"};
+
+    &:hover {
+        background-color: ${({ darkMode }) => darkMode ? "#444" : "#e0e0e0"};
+    }
+
+    &.active {
+        background-color: ${({ darkMode }) => darkMode ? "#444" : "#bdbdbd"};
+    }
 `;
 
 function App() {
@@ -68,6 +116,7 @@ function App() {
     const [weather, setWeather] = useState(null);
     const [quote, setQuote] = useState(null);
     const [username, setUsername] = useState("");
+    const { darkMode, setDarkMode } = useDarkMode();
     const API_KEY = '3b0dad37b0a95472e4183882ade8a4b5'
 
     const add = (item) => {
@@ -283,7 +332,7 @@ function App() {
     };
 
     const navigationBar = (
-        <StyledAppBar position="static">
+        <StyledAppBar position="static" darkMode={darkMode}>
             <Toolbar>
                 <Grid justifyContent="space-between" container>
                     <Grid item>
@@ -292,6 +341,7 @@ function App() {
                     <Grid item>
                         <SearchContainer>
                             <StyledInputBase
+                                darkMode={darkMode}
                                 placeholder="검색할 투두 제목 입력 🤔"
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
@@ -300,6 +350,9 @@ function App() {
                         </SearchContainer>
                     </Grid>
                     <Grid item>
+                        <Button color="inherit" onClick={() => setDarkMode(!darkMode)}>
+                            {darkMode ? "☀️ 라이트모드" : "🌙 다크모드"}
+                        </Button>
                         <Button color="inherit" onClick={() => window.location.href = '/mypage'}>🧍마이페이지</Button>
                         <Button color="inherit" onClick={signout}>👋로그아웃</Button>
                     </Grid>
@@ -342,15 +395,16 @@ function App() {
                                 const sortedData = sortData(items);
                                 setItems(sortedData);
                             }}
+                            darkMode={darkMode}
                         >
-                            <MenuItem value="기본순">기본순</MenuItem>
-                            <MenuItem value="중요순">중요순</MenuItem>
-                            <MenuItem value="제목순">제목순</MenuItem>
-                            <MenuItem value="마감일순">마감일순</MenuItem>
+                            <StyledMenuItem value="기본순" darkMode={darkMode}>기본순</StyledMenuItem>
+                            <StyledMenuItem value="중요순" darkMode={darkMode}>중요순</StyledMenuItem>
+                            <StyledMenuItem value="제목순" darkMode={darkMode}>제목순</StyledMenuItem>
+                            <StyledMenuItem value="마감일순" darkMode={darkMode}>마감일순</StyledMenuItem>
                         </StyledSelect>
 
                         <div className="TodoList">
-                            <Paper style={{ margin: 16 }}>
+                            <StyledPaper style={{ margin: 16 }} darkMode={darkMode}>
                                 <div style={{ margin: "20px 0" }}>
                                     <LinearProgress variant="determinate" value={calculateProgress()} />
                                     <Typography variant="body1" align="center">
@@ -363,27 +417,27 @@ function App() {
                                         <Todo item={item} key={item.id} delete={deleteItem} update={update} />
                                     ))}
                                 </List>
-                            </Paper>
+                            </StyledPaper>
                             
                             <DeleteTodo deleteForCompleted={deleteForCompleted} />
-                            
-                            <div className="PaginationButtons" style={{marginTop: 30}}>
-                                <Button onClick={() => setCurrentPage(firstPages)}>«</Button>
-                                <Button onClick={prevPage}>‹</Button>
+
+                            <PagingContainer>
+                                <PagingButton darkMode={darkMode} onClick={() => setCurrentPage(firstPages)}>«</PagingButton>
+                                <PagingButton darkMode={darkMode} onClick={prevPage}>‹</PagingButton>
                                 {pageNumbers.map(num => (
                                     num === currentPage ? (
-                                        <ActiveButton key={num} onClick={() => setCurrentPage(num)}>
+                                        <ActiveButton key={num} darkMode={darkMode} onClick={() => setCurrentPage(num)}>
                                             {num}
                                         </ActiveButton>
                                     ) : (
-                                        <Button key={num} onClick={() => setCurrentPage(num)}>
+                                        <PagingButton key={num} darkMode={darkMode} onClick={() => setCurrentPage(num)}>
                                             {num}
-                                        </Button>
+                                        </PagingButton>
                                     )
                                 ))}
-                                <Button onClick={nextPage}>›</Button>
-                                <Button onClick={() => setCurrentPage(totalPages)}>››</Button>
-                            </div>
+                                <PagingButton darkMode={darkMode} onClick={nextPage}>›</PagingButton>
+                                <PagingButton darkMode={darkMode} onClick={() => setCurrentPage(totalPages)}>››</PagingButton>
+                            </PagingContainer>
                         </div>
                     </Container>
                 </div>
