@@ -29,6 +29,9 @@ const StyledAppBar = styled(AppBar)`
 
 const StyledSelect = styled(Select)`
   && {
+    display: block;
+    width: 100px;
+    margin-left: 30px;
     padding: 0 30px 0 10px;
     background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
     color: ${({ darkMode }) => darkMode ? "#fff" : "#757575"};
@@ -388,20 +391,6 @@ function App() {
                     <Container maxWidth="md">
                         {quote && <div style={{marginBottom: 50, color: '#fcb9aa', fontSize: 14, fontStyle: 'italic'}}>"{quote.content}" - {quote.author}</div>}
                         <AddTodo add={add} />
-                        <StyledSelect
-                            value={sortOrder}
-                            onChange={(e) => {
-                                setSortOrder(e.target.value);
-                                const sortedData = sortData(items);
-                                setItems(sortedData);
-                            }}
-                            darkMode={darkMode}
-                        >
-                            <StyledMenuItem value="기본순" darkMode={darkMode}>기본순</StyledMenuItem>
-                            <StyledMenuItem value="중요순" darkMode={darkMode}>중요순</StyledMenuItem>
-                            <StyledMenuItem value="제목순" darkMode={darkMode}>제목순</StyledMenuItem>
-                            <StyledMenuItem value="마감일순" darkMode={darkMode}>마감일순</StyledMenuItem>
-                        </StyledSelect>
 
                         <div className="TodoList">
                             <StyledPaper style={{ margin: 16 }} darkMode={darkMode}>
@@ -411,6 +400,21 @@ function App() {
                                         {Math.round(calculateProgress())}%
                                     </Typography>
                                 </div>
+
+                                <StyledSelect
+                                    value={sortOrder}
+                                    onChange={(e) => {
+                                        setSortOrder(e.target.value);
+                                        const sortedData = sortData(items);
+                                        setItems(sortedData);
+                                    }}
+                                    darkMode={darkMode}
+                                >
+                                    <StyledMenuItem value="기본순" darkMode={darkMode}>기본순</StyledMenuItem>
+                                    <StyledMenuItem value="중요순" darkMode={darkMode}>중요순</StyledMenuItem>
+                                    <StyledMenuItem value="제목순" darkMode={darkMode}>제목순</StyledMenuItem>
+                                    <StyledMenuItem value="마감일순" darkMode={darkMode}>마감일순</StyledMenuItem>
+                                </StyledSelect>
 
                                 <List>
                                     {currentItems.map((item) => (
