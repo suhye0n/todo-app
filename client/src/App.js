@@ -124,7 +124,6 @@ function App() {
     const [quote, setQuote] = useState(null);
     const [username, setUsername] = useState("");
     const { darkMode, setDarkMode } = useDarkMode();
-    const [prevProgress, setPrevProgress] = useState(0);
     const API_KEY = '3b0dad37b0a95472e4183882ade8a4b5'
 
     const add = (item) => {
