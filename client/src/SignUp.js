@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, TextField, Link, Grid, Container, Typography, AppBar, Toolbar } from "@material-ui/core";
 import { signup } from "./service/ApiService";
 import styled from "styled-components";
@@ -43,6 +43,15 @@ function SignUp() {
             alert("회원가입에 실패하였습니다.");
         }
     };
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('ACCESS_TOKEN');
+        
+        if (accessToken) {
+            window.location.href = "/";
+            return;
+        }
+    }, [])
 
     return (
         <>

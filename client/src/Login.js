@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { signin } from "./service/ApiService";
 import { Button, TextField, Grid, Link, Container, Typography, AppBar, Toolbar } from "@material-ui/core";
 import styled from "styled-components";
@@ -35,6 +35,15 @@ function Login() {
             alert("로그인에 실패하였습니다.");
         }
     }
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('ACCESS_TOKEN');
+        
+        if (accessToken) {
+            window.location.href = "/";
+            return;
+        }
+    }, [])
 
     return (
         <>
