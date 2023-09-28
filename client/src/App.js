@@ -3,6 +3,7 @@ import Todo from './Todo';
 import AddTodo from './AddTodo';
 import DeleteTodo from './DeleteTodo';
 import { Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography, InputBase } from "@material-ui/core";
+import LinearProgress from '@material-ui/core/LinearProgress';
 import SearchIcon from '@material-ui/icons/Search';
 import './App.css';
 import { call, signout } from './service/ApiService';
@@ -72,6 +73,12 @@ function App() {
             }
         });
     }
+    
+    const calculateProgress = () => {
+        const completedTasks = items.filter(item => item.done).length;
+        const totalTasks = items.length;
+        return (completedTasks / totalTasks) * 100;
+    }    
 
     useEffect(() => {
         call("/todo", "GET", null).then((response) => {
@@ -140,10 +147,18 @@ function App() {
             ) : (
                 <div>
                     {navigationBar}
+                    
                     <Container maxWidth="md">
                         <AddTodo add={add} />
                         <div className="TodoList">
                             <Paper style={{ margin: 16 }}>
+                                <div style={{ margin: "20px 0" }}>
+                                    <Typography variant="body1" align="center">
+                                        진행도: {Math.round(calculateProgress())}%
+                                    </Typography>
+                                    <LinearProgress variant="determinate" value={calculateProgress()} />
+                                </div>
+                                
                                 <List>
                                     {currentItems.map((item) => (
                                         <Todo item={item} key={item.id} delete={deleteItem} update={update} />
