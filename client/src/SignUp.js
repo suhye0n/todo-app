@@ -10,18 +10,25 @@ import {
 import { signup } from "./service/ApiService";
 
 function SignUp() {
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         const data = new FormData(event.target);
         const username = data.get("username");
         const email = data.get("email");
         const password = data.get("password");
+        const confirmPassword = data.get("confirmPassword");
 
-        signup({ email, username, password })
-            .then((response) => {
-                window.location.href = "/login";
-            });
+        if (password !== confirmPassword) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        try {
+            await signup({ email, username, password })
+        } catch (error) {
+            alert("회원가입에 실패하였습니다.");
+        }
     };
 
     return (
@@ -58,6 +65,7 @@ function SignUp() {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
+                            type="password"
                             autoComplete="current-password"
                             name="password"
                             variant="outlined"
@@ -65,6 +73,18 @@ function SignUp() {
                             fullWidth
                             id="password"
                             label="패스워드"
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            type="password"
+                            autoComplete="confirm-password"
+                            name="confirmPassword"
+                            variant="outlined"
+                            required
+                            fullWidth
+                            id="confirmPassword"
+                            label="비밀번호 확인"
                         />
                     </Grid>
                     <Grid item xs={12}>

@@ -64,6 +64,7 @@ public class UserController {
 	        final UserDTO responseUserDTO = UserDTO.builder()
 	                .email(user.getEmail())
 	                .id(user.getId())
+	                .username(user.getUsername())
 	                .token(token)
 	                .build();
 
@@ -75,6 +76,21 @@ public class UserController {
 	        return ResponseEntity.badRequest().body(responseDTO);
 	    }
 	}
+
+
+    @PostMapping("/update")
+    public void edit_information(@RequestBody UserDTO userDTO) {
+            String before_userId = userService.getUser(userDTO.getEmail().toString()).getId();
+
+            UserEntity update_user = UserEntity.builder()
+                    .id(before_userId)
+                    .email(userDTO.getEmail())
+                    .username(userDTO.getUsername())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
+                    .build();
+
+            userService.updateUser(update_user);
+    }
 
 	@DeleteMapping("/withdrawal")
 	public ResponseEntity<?> deleteUser(@RequestBody UserDTO userDTO) {

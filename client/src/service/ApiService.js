@@ -1,6 +1,8 @@
 import { API_BASE_URL } from "../app-config";
 
 const ACCESS_TOKEN = "ACCESS_TOKEN";
+const username = "username";
+const email = "email";
 
 export const call = async (api, method, request) => {
     const headers = new Headers({
@@ -42,6 +44,8 @@ export const signin = async userDTO => {
 
     if (response.token) {
         localStorage.setItem(ACCESS_TOKEN, response.token);
+        localStorage.setItem(username, response.username);
+        localStorage.setItem(email, userDTO.email);
         window.location.href = "/";
     }
 }
@@ -51,7 +55,7 @@ export const signup = async userDTO => {
         const response = await call("/auth/signup", "POST", userDTO);
 
         if (response.id) {
-            window.location.href = "/";
+            window.location.href = "/login";
         }
     } catch (error) {
         console.error("Oops!", error.status, "Ooops!");
@@ -66,24 +70,20 @@ export const signup = async userDTO => {
 
 export const signout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(username);
+    localStorage.removeItem(email);
     window.location.href = "/";
 }
 
-export const infoedit = async userDTO => {
+export const update = async userDTO => {
     try {
-        const response = await call("/auth/delete", "DELETE", userDTO);
+        const response = await call("/auth/update", "POST", userDTO);
 
         if (response.status === 200) {
-            signout();
+            window.location.href ="/";
         }
     } catch (error) {
         console.error(error.status);
-
-        if (error.status === 403) {
-            window.location.href = "/login";
-        }
-
-        throw error;
     }
 }
 
@@ -96,6 +96,7 @@ export const withdrawal = async userDTO => {
         }
     } catch (error) {
         console.error(error.status);
+        alert("회원 탈퇴를 실패하였습니다.");
 
         if (error.status === 403) {
             window.location.href = "/login";

@@ -45,4 +45,12 @@ public class UserService {
         }
         return false;
     }
+
+    public UserEntity getUser(final String email){
+        return userRepository.findByEmail(email);
+    }
+
+    public void updateUser(final UserEntity userEntity){
+        userRepository.save(userEntity);
+    }
 }
