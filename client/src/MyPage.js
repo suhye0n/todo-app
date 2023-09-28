@@ -106,10 +106,9 @@ function MyPage() {
                                 autoComplete="email"
                                 name="email"
                                 variant="outlined"
-                                required
                                 fullWidth
                                 id="email"
-                                label="이메일 주소"
+                                label="이메일 주소 (수정할 수 없어요)"
                                 defaultValue={localStorage.getItem("email")}
                                 InputProps={{
                                     readOnly: true,
