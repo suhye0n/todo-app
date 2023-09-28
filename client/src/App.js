@@ -124,6 +124,7 @@ function App() {
     const [quote, setQuote] = useState(null);
     const [username, setUsername] = useState("");
     const { darkMode, setDarkMode } = useDarkMode();
+    const [prevProgress, setPrevProgress] = useState(0);
     const API_KEY = '3b0dad37b0a95472e4183882ade8a4b5'
 
     const add = (item) => {
@@ -298,6 +299,16 @@ function App() {
         const sortedData = sortData(items);
         setItems(sortedData);
     }, [sortOrder]);
+
+    useEffect(() => {
+        const progress = calculateProgress();
+        if (progress === 100 && prevProgress !== 100) {
+            setTimeout(() => {
+                alert("축하합니다! 모든 할 일을 완료하셨습니다!");
+            }, 100);
+        }
+        setPrevProgress(progress);
+    }, [items]);        
 
     useEffect(() => {
         const storedUsername = localStorage.getItem('username');
