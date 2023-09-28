@@ -3,14 +3,17 @@ import { signin } from "./service/ApiService";
 import { Button, TextField, Grid, Link, Container, Typography } from "@material-ui/core";
 
 function Login() {
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.target);
         const email = data.get("email");
         const password = data.get("password");
 
-        signin({ email, password });
+        try {
+            await signin({ email, password });
+        } catch (error) {
+            alert("로그인에 실패하였습니다.");
+        }
     }
 
     return (
