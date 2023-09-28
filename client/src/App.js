@@ -8,6 +8,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import './App.css';
 import { call, signout } from './service/ApiService';
 import styled from "styled-components";
+import mbxGeocoding from '@mapbox/mapbox-sdk/services/geocoding';
+
+const geocodingClient = mbxGeocoding({ accessToken: 'pk.eyJ1Ijoic3VoeWUwbiIsImEiOiJjbG4ycGNnNDEwYzJnMmtucmU0cHl5YTQzIn0.DJ559UUk37apuQv0jZdWMw' });
 
 const StyledAppBar = styled(AppBar)`
   && {
@@ -121,32 +124,47 @@ function App() {
 
         return sortedItems;
     }
-
+    
     const getWeather = async (latitude, longitude) => {
         try {
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric&lang=kr`);
-    
+      
             if (!response.ok) {
                 throw new Error("날씨 정보를 가져오는데 실패했습니다.");
             }
-    
+      
             const data = await response.json();
-            setLocation(data.name);
-            setWeather(data);
+            
+            const geoResponse = await geocodingClient.reverseGeocode({
+                query: [longitude, latitude],
+                language: ['ko']
+            }).send();
     
+            const cityNameInKorean = geoResponse.body.features[0].place_name;
+    
+            setLocation(cityNameInKorean);
+            setWeather(data);
+      
         } catch (error) {
             console.error("날씨 정보를 가져오는데 실패했습니다.", error);
         }
-    };    
+    };     
 
     const getRandomQuote = async () => {
         try {
-            const response = await axios.get("https://api.quotable.io/random");
-            setQuote(response.data);
+            const response = await fetch("https://api.quotable.io/random");
+    
+            if (!response.ok) {
+                throw new Error("명언을 가져오는데 실패했습니다.");
+            }
+    
+            const data = await response.json();
+            setQuote(data);
+    
         } catch (error) {
             console.error("명언을 가져오는데 실패했습니다.", error);
         }
-    };
+    };    
 
     const Clock = () => {
         const [time, setTime] = useState(new Date());
@@ -255,9 +273,8 @@ function App() {
                         </div>
                     )}
 
-                    {quote && <div>"{quote.content}" - {quote.author}</div>}
-
                     <Container maxWidth="md">
+                        {quote && <div>"{quote.content}" - {quote.author}</div>}
                         <AddTodo add={add} />
                         <StyledSelect
                             value={sortOrder}
