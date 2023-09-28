@@ -1,5 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextField, Link, Grid, Container, Typography, AppBar, Toolbar } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { signup } from "./service/ApiService";
 import styled from "styled-components";
 import { useDarkMode } from "./DarkModeContext";
@@ -46,6 +50,16 @@ const StyledTextField = styled(TextField)`
 
 function SignUp() {
     const { darkMode, setDarkMode } = useDarkMode();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
 
     const navigationBar = (
         <StyledAppBar darkMode={darkMode} position="static">
@@ -89,7 +103,7 @@ function SignUp() {
 
     useEffect(() => {
         const accessToken = localStorage.getItem('ACCESS_TOKEN');
-        
+
         if (accessToken) {
             window.location.href = "/";
             return;
@@ -135,7 +149,7 @@ function SignUp() {
                         <Grid item xs={12}>
                             <StyledTextField
                                 darkMode={darkMode}
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 autoComplete="current-password"
                                 name="password"
                                 variant="outlined"
@@ -143,12 +157,21 @@ function SignUp() {
                                 fullWidth
                                 id="password"
                                 label="비밀번호🔒"
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={handlePasswordVisibility}>
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <StyledTextField
                                 darkMode={darkMode}
-                                type="password"
+                                type={showConfirmPassword ? "text" : "password"}
                                 autoComplete="confirm-password"
                                 name="confirmPassword"
                                 variant="outlined"
@@ -156,6 +179,15 @@ function SignUp() {
                                 fullWidth
                                 id="confirmPassword"
                                 label="비밀번호 확인🔒"
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={handleConfirmPasswordVisibility}>
+                                                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>

@@ -1,5 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextField, Link, Container, Grid, AppBar, Toolbar, Typography, Divider } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { update, withdrawal, signout } from "./service/ApiService";
 import styled from "styled-components";
 import { useDarkMode } from "./DarkModeContext";
@@ -44,6 +48,16 @@ const StyledTextField = styled(TextField)`
 
 function MyPage() {
     const { darkMode, setDarkMode } = useDarkMode();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
 
     useEffect(() => {
         const currentDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -69,14 +83,14 @@ function MyPage() {
     const handleWithdrawal = async () => {
         const emailInput = prompt('정말 탈퇴하시려면 이메일을 입력해주세요😢');
         const password = prompt('정말 탈퇴하시려면 비밀번호를 입력해주세요😢');
-    
+
         const storedEmail = localStorage.getItem("email");
-    
+
         if (emailInput !== storedEmail) {
             alert("입력하신 이메일이 올바르지 않습니다.");
             return;
         }
-    
+
         if (emailInput && password) {
             try {
                 await withdrawal({ email: emailInput, password: password });
@@ -91,7 +105,7 @@ function MyPage() {
         } else {
             alert("회원 탈퇴를 취소하였습니다.");
         }
-    };    
+    };
 
     const navigationBar = (
         <StyledAppBar position="static" darkMode={darkMode}>
@@ -114,7 +128,7 @@ function MyPage() {
 
     useEffect(() => {
         const accessToken = localStorage.getItem('ACCESS_TOKEN');
-        
+
         if (!accessToken) {
             window.location.href = "/login";
             return;
@@ -163,15 +177,24 @@ function MyPage() {
                         </Grid>
                         <Grid item xs={12}>
                             <StyledTextField
+                                darkMode={darkMode}
+                                type={showPassword ? "text" : "password"}
                                 autoComplete="current-password"
                                 name="password"
                                 variant="outlined"
                                 required
                                 fullWidth
                                 id="password"
-                                darkMode={darkMode}
-                                label="비밀번호"
-                                autoFocus
+                                label="비밀번호🔒"
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={handlePasswordVisibility}>
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -187,18 +210,18 @@ function MyPage() {
                     </Grid>
                 </form>
 
-                <Divider variant="middle" style={{ margin: "1rem 0" }}/>
+                <Divider variant="middle" style={{ margin: "1rem 0" }} />
 
                 <Typography variant="h6" align="center">
                     😢회원 탈퇴
                 </Typography>
-                <Typography 
-                    align="center" 
+                <Typography
+                    align="center"
                     onClick={handleWithdrawal}
                 >
                     <Link style={{ cursor: "pointer" }}>회원 탈퇴하시려면 여기를 클릭해주세요🖱️</Link>
                 </Typography>
-                
+
             </Container>
         </>
     );

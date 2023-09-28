@@ -51,7 +51,7 @@ public class UserController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO) {
 	    try {
-	        UserEntity user = userService.getUserByEmail(
+	        UserEntity user = userService.getByCredentials(
 	                userDTO.getEmail(),
 	                userDTO.getPassword(),
 	                passwordEncoder);
