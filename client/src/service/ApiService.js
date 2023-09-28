@@ -87,10 +87,6 @@ export const update = async userDTO => {
 export const withdrawal = async userDTO => {
     try {
         const response = await call("/auth/withdrawal", "DELETE", userDTO);
-
-        if (response.status === 200) {
-            signout();
-        }
     } catch (error) {
         console.error(error.status);
         alert("회원 탈퇴를 실패하였습니다🤔");
