@@ -103,7 +103,7 @@ function SignUp() {
                 <form noValidate onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography component="h1" variant="h5" style={{ marginBottom: "8%" }}>
+                            <Typography component="h1" variant="h5" style={{ marginTop: 120, marginBottom: "8%" }}>
                                 🧑계정 생성
                             </Typography>
                         </Grid>

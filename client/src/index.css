@@ -20,15 +20,35 @@ body.light {
   color: #333;
 }
 
-body.dark, body.dark .MuiPaper-root {
+body.dark,
+body.dark .MuiPaper-root {
   background-color: #333;
   color: #fff;
 }
 
-body.dark ul, body.dark svg {
+body.dark ul,
+body.dark svg {
   color: #fff;
 }
 
 body.dark button:hover {
   background-color: #444;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background-color: #c954f830;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fcb9aa;
+  transition: all 0.4s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  opacity: .8;
 }

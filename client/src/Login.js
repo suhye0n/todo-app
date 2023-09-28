@@ -93,7 +93,7 @@ function Login() {
             {navigationBar}
             <Container component="main" maxWidth="xs" style={{ marginTop: "8%" }}>
                 <Grid container spacing={2}>
-                    <Typography component="h1" variant="h5" style={{ marginBottom: "8%", paddingLeft: "10px" }}>
+                    <Typography component="h1" variant="h5" style={{ marginTop: 120, marginBottom: "8%", paddingLeft: "10px" }}>
                         🙌로그인
                     </Typography>
                 </Grid>
