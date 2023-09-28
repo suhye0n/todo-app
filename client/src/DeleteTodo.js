@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Button } from "@material-ui/core";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 
 function DeleteTodo(props) {
@@ -11,13 +11,13 @@ function DeleteTodo(props) {
 
     return (
         <div>
-            <span>완료한 할일 삭제</span>
-            <IconButton
-                aria-label="Delete Completed Todo"
+            <Button
                 onClick={deleteEventHandler}
-            >
-                <DeleteOutlined />
-            </IconButton>
+                type="submit"
+                variant="contained"
+                color="primary">
+                완료한 할일 삭제 <DeleteOutlined />
+            </Button>
         </div>
     );
 }

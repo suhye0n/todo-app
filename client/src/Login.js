@@ -16,7 +16,7 @@ function Login() {
             <Toolbar>
                 <Grid justifyContent="space-between" container>
                     <Grid item>
-                        <Typography variant="h6" onClick={() => window.location.href = '/'} style={{ cursor: "pointer" }}>오늘의 할일</Typography>
+                        <Typography variant="h6" onClick={() => window.location.href = '/'} style={{ cursor: "pointer" }}>✍오늘의 할일</Typography>
                     </Grid>
                 </Grid>
             </Toolbar>
@@ -41,8 +41,8 @@ function Login() {
             {navigationBar}
             <Container component="main" maxWidth="xs" style={{ marginTop: "8%" }}>
                 <Grid container spacing={2}>
-                    <Typography component="h1" variant="h5">
-                        로그인
+                    <Typography component="h1" variant="h5" style={{ marginBottom: "8%", paddingLeft: "10px" }}>
+                        🙌로그인
                     </Typography>
                 </Grid>
                 <form noValidate onSubmit={handleSubmit}>
@@ -53,7 +53,7 @@ function Login() {
                                 required
                                 fullWidth
                                 id="email"
-                                label="이메일 주소"
+                                label="이메일 주소📧"
                                 name="email"
                                 autoComplete="email"
                             />
@@ -65,7 +65,7 @@ function Login() {
                                 required
                                 fullWidth
                                 id="password"
-                                label="패스워드"
+                                label="비밀번호🔒"
                                 name="password"
                                 autoComplete="password"
                             />
@@ -81,7 +81,7 @@ function Login() {
                             </Button>
                         </Grid>
                         <Link href="/signup" variant="body2">
-                            <Grid item>계정이 없습니까? 여기서 가입하세요.</Grid>
+                            <Grid item style={{ padding: "10px" }}>계정이 없습니까? 여기서 가입하세요🖱️</Grid>
                         </Link>
                     </Grid>
                 </form>

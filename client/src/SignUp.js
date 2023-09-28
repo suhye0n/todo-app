@@ -16,7 +16,7 @@ function SignUp() {
             <Toolbar>
                 <Grid justifyContent="space-between" container>
                     <Grid item>
-                        <Typography variant="h6" onClick={() => window.location.href = '/'} style={{ cursor: "pointer" }}>오늘의 할일</Typography>
+                        <Typography variant="h6" onClick={() => window.location.href = '/'} style={{ cursor: "pointer" }}>✍오늘의 할일</Typography>
                     </Grid>
                 </Grid>
             </Toolbar>
@@ -51,8 +51,8 @@ function SignUp() {
                 <form noValidate onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography component="h1" variant="h5">
-                                계정 생성
+                            <Typography component="h1" variant="h5" style={{ marginBottom: "8%" }}>
+                                🧑계정 생성
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -63,7 +63,7 @@ function SignUp() {
                                 required
                                 fullWidth
                                 id="username"
-                                label="사용자 이름"
+                                label="사용자 이름🧑"
                                 autoFocus
                             />
                         </Grid>
@@ -75,7 +75,7 @@ function SignUp() {
                                 required
                                 fullWidth
                                 id="email"
-                                label="이메일 주소"
+                                label="이메일 주소📧"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -87,7 +87,7 @@ function SignUp() {
                                 required
                                 fullWidth
                                 id="password"
-                                label="패스워드"
+                                label="비밀번호🔒"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -99,7 +99,7 @@ function SignUp() {
                                 required
                                 fullWidth
                                 id="confirmPassword"
-                                label="비밀번호 확인"
+                                label="비밀번호 확인🔒"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -113,10 +113,10 @@ function SignUp() {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid container justifyContent="flex-end">
+                    <Grid container>
                         <Grid item>
                             <Link href="/login" variant="body2">
-                                이미 계정이 있습니까? 로그인 하세요.
+                                <Grid item style={{ padding: "20px 3px" }}>이미 계정이 있습니까? 여기서 로그인 하세요🖱️</Grid>
                             </Link>
                         </Grid>
                     </Grid>

@@ -15,7 +15,9 @@ const geocodingClient = mbxGeocoding({ accessToken: 'pk.eyJ1Ijoic3VoeWUwbiIsImEi
 const StyledAppBar = styled(AppBar)`
   && {
     background-color: #fff;
-    color: #757575
+    color: #757575;
+    position: fixed;
+    top: 0;
   }
 `;
 
@@ -65,15 +67,16 @@ function App() {
     const [location, setLocation] = useState("");
     const [weather, setWeather] = useState(null);
     const [quote, setQuote] = useState(null);
+    const [username, setUsername] = useState("");
     const API_KEY = '3b0dad37b0a95472e4183882ade8a4b5'
 
     const add = (item) => {
         call("/todo", "POST", item).then((response) => {
-            const sortedData = sortData(response.data);
-            setItems(sortedData);
+            setSortOrder('기본순');
+            setItems(response.data);
             setCurrentPage(totalPages);
         });
-    }
+    }    
 
     const deleteItem = (item) => {
         call("/todo", "DELETE", item).then((response) =>
@@ -116,7 +119,7 @@ function App() {
                 sortedItems.sort((a, b) => a.title.localeCompare(b.title));
                 break;
             case "마감일순":
-                sortedItems.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+                sortedItems.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
                 break;
             default:
                 return sortedItems;
@@ -193,7 +196,7 @@ function App() {
         } catch (error) {
             console.error("Failed to fetch quote", error);
         }
-    };      
+    };
 
     const Clock = () => {
         const [time, setTime] = useState(new Date());
@@ -210,8 +213,24 @@ function App() {
 
         const formattedTime = time.toLocaleTimeString();
 
-        return <span>{formattedTime}</span>;
-    }
+        let greetingMessage = "";
+        const hour = time.getHours();
+
+        if (hour < 12) {
+            greetingMessage = `안녕하세요, ${username}님😀🌅`;
+        } else if (hour < 18) {
+            greetingMessage = `점심은 드셨나요, ${username}님?😊🍱`;
+        } else {
+            greetingMessage = `오늘 하루도 멋진 하루 되셨나요, ${username}님?🌆`;
+        }
+
+        return (
+            <div>
+                <span>{formattedTime}</span>
+                <div style={{fontSize: 20, marginTop: 30}}>{greetingMessage}</div>
+            </div>
+        );
+    };
 
     useEffect(() => {
         const sortedData = sortData(items);
@@ -219,15 +238,26 @@ function App() {
     }, [sortOrder]);
 
     useEffect(() => {
+        const storedUsername = localStorage.getItem('username');
+
+        if (storedUsername) {
+            setUsername(storedUsername);
+        } else {
+            window.location.href = "/login";
+            return;
+        }
+        
         call("/todo", "GET", null).then((response) => {
             setItems(response.data);
             setLoading(false);
         });
+        
         navigator.geolocation.getCurrentPosition((position) => {
-          getWeather(position.coords.latitude, position.coords.longitude);
+            getWeather(position.coords.latitude, position.coords.longitude);
         });
+        
         getRandomQuote();
-    }, []);
+    }, []);    
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -290,7 +320,7 @@ function App() {
                 <div>
                     {navigationBar}
 
-                    <div style={{ fontSize: 40, marginTop: 80, marginBottom: 50 }}> <Clock /> </div>
+                    <div style={{ fontSize: 40, marginTop: 120, marginBottom: 50 }}> <Clock /> </div>
                     {weather && (
                         <div>
                             <img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} alt="날씨 아이콘" />
@@ -334,7 +364,10 @@ function App() {
                                     ))}
                                 </List>
                             </Paper>
-                            <div className="PaginationButtons">
+                            
+                            <DeleteTodo deleteForCompleted={deleteForCompleted} />
+                            
+                            <div className="PaginationButtons" style={{marginTop: 30}}>
                                 <Button onClick={() => setCurrentPage(firstPages)}>«</Button>
                                 <Button onClick={prevPage}>‹</Button>
                                 {pageNumbers.map(num => (
@@ -353,7 +386,6 @@ function App() {
                             </div>
                         </div>
                     </Container>
-                    <DeleteTodo deleteForCompleted={deleteForCompleted} />
                 </div>
             )}
         </div>
