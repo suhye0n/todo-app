@@ -11,7 +11,7 @@
 ## ﻿기술 스택
 - Front-end: React
 - Back-end: Spring Framework
-- Database: H2
+- Database: H2 Database
 
 ## 시나리오
 1. **할일 추가**
