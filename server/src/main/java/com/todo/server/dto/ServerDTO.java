@@ -1,9 +1,6 @@
 package com.todo.server.dto;
 
-import java.util.List;
-
 import com.todo.server.model.ServerEntity;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

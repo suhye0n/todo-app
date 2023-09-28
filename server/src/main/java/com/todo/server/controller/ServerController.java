@@ -1,10 +1,7 @@
 package com.todo.server.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,12 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.todo.server.dto.ResponseDTO;
 import com.todo.server.dto.ServerDTO;
 import com.todo.server.model.ServerEntity;
 import com.todo.server.service.ServerService;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

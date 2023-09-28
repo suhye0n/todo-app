@@ -15,6 +15,29 @@ const StyledAppBar = styled(AppBar)`
   }
 `;
 
+const SearchContainer = styled.div`
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    margin-right: 10px;
+    width: 250px;
+`;
+
+const StyledInputBase = styled(InputBase)`
+    && {
+        padding-left: 40px;
+        width: 100%;
+    }
+`;
+
+const StyledSearchIcon = styled(SearchIcon)`
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #757575;
+`;
+
 function App() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -88,13 +111,17 @@ function App() {
                         <Typography variant="h6">오늘의 할일</Typography>
                     </Grid>
                     <Grid item>
-                        <InputBase
-                            placeholder="Search…"
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                            startAdornment={<SearchIcon />}
-                        />
-                        <Button color="inherit">마이페이지</Button>
+                        <SearchContainer>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
+                            <StyledSearchIcon />
+                        </SearchContainer>
+                    </Grid>
+                    <Grid item>
+                        <Button color="inherit" onClick={() => window.location.href = '/mypage'}>마이페이지</Button>
                         <Button color="inherit" onClick={signout}>로그아웃</Button>
                     </Grid>
                 </Grid>

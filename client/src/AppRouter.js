@@ -3,6 +3,7 @@ import "./index.css";
 import App from "./App";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import MyPage from "./MyPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -24,6 +25,7 @@ function AppRouter() {
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
+                    <Route path="/mypage" element={<MyPage />} />
                     <Route path="/" element={<App />} />
                 </Routes>
             </div>

@@ -68,3 +68,39 @@ export const signout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
     window.location.href = "/";
 }
+
+export const infoedit = async userDTO => {
+    try {
+        const response = await call("/auth/delete", "DELETE", userDTO);
+
+        if (response.status === 200) {
+            signout();
+        }
+    } catch (error) {
+        console.error(error.status);
+
+        if (error.status === 403) {
+            window.location.href = "/login";
+        }
+
+        throw error;
+    }
+}
+
+export const withdrawal = async userDTO => {
+    try {
+        const response = await call("/auth/withdrawal", "DELETE", userDTO);
+
+        if (response.status === 200) {
+            signout();
+        }
+    } catch (error) {
+        console.error(error.status);
+
+        if (error.status === 403) {
+            window.location.href = "/login";
+        }
+
+        throw error;
+    }
+}

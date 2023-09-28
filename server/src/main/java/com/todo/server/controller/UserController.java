@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +14,7 @@ import com.todo.server.dto.UserDTO;
 import com.todo.server.model.UserEntity;
 import com.todo.server.security.TokenProvider;
 import com.todo.server.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class UserController {
@@ -53,35 +50,49 @@ public class UserController {
 	
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO) {
-		UserEntity user = userService.getByCredentials(
-				userDTO.getEmail(), 
-				userDTO.getPassword(),
-				passwordEncoder);
-		
-		if(user != null) {
-			final String token = tokenProvider.create(user);
-			final UserDTO responseUserDTO = UserDTO.builder()
-					.email(user.getEmail())
-					.id(user.getId())
-					.token(token)
-					.build();
-			
-			return ResponseEntity.ok().body(responseUserDTO);
-		} else {
-			ResponseDTO responseDTO = ResponseDTO.builder()
-					.error("Login failed")
-					.build();
-			return ResponseEntity.badRequest().body(responseDTO);
-		}
+	    try {
+	        UserEntity user = userService.getByCredentials(
+	                userDTO.getEmail(),
+	                userDTO.getPassword(),
+	                passwordEncoder);
+
+	        if (user == null) {
+	            throw new Exception("Login failed");
+	        }
+
+	        final String token = tokenProvider.create(user);
+	        final UserDTO responseUserDTO = UserDTO.builder()
+	                .email(user.getEmail())
+	                .id(user.getId())
+	                .token(token)
+	                .build();
+
+	        return ResponseEntity.ok().body(responseUserDTO);
+	    } catch (Exception e) {
+	        ResponseDTO responseDTO = ResponseDTO.builder()
+	                .error(e.getMessage())
+	                .build();
+	        return ResponseEntity.badRequest().body(responseDTO);
+	    }
 	}
-	
-	@DeleteMapping
+
+	@DeleteMapping("/withdrawal")
 	public ResponseEntity<?> deleteUser(@RequestBody UserDTO userDTO) {
-		try {
-			return null;
-		} catch(Exception e) {
-			return null;
-		}
+	    try {
+	        boolean deleted = userService.deleteUser(
+	                userDTO.getEmail(), 
+	                userDTO.getPassword(), 
+	                passwordEncoder);
+
+	        if (!deleted) {
+	            throw new Exception("Invalid email or password");
+	        }
+
+	        return ResponseEntity.ok().body(ResponseDTO.builder().message("Successfully deleted user").build());
+	    } catch (Exception e) {
+	        ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+	        return ResponseEntity.badRequest().body(responseDTO);
+	    }
 	}
 
 }
