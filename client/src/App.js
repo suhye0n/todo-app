@@ -123,12 +123,18 @@ function App() {
     const API_KEY = '3b0dad37b0a95472e4183882ade8a4b5'
 
     const add = (item) => {
+        const currentTotalItems = items.length;
         call("/todo", "POST", item).then((response) => {
             setSortOrder('기본순');
             setItems(response.data);
-            setCurrentPage(totalPages);
+            
+            if (currentTotalItems % 5 === 0) {
+                setCurrentPage(totalPages + 1);
+            } else {
+                setCurrentPage(totalPages);
+            }
         });
-    }    
+    }         
 
     const deleteItem = (item) => {
         call("/todo", "DELETE", item).then((response) =>
