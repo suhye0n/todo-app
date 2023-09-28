@@ -290,20 +290,20 @@ function App() {
                 <div>
                     {navigationBar}
 
-                    <div style={{ fontSize: 30, marginTop: 80, marginBottom: 50 }}> <Clock /> </div>
+                    <div style={{ fontSize: 40, marginTop: 80, marginBottom: 50 }}> <Clock /> </div>
                     {weather && (
                         <div>
                             <img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} alt="날씨 아이콘" />
-                            <p>현재 위치: {location}</p>
+                            <p>📌 {location}</p>
                             <p>
-                                온도: {weather.main.temp}°C,
-                                날씨: {weather.weather[0].description}
+                                🌡️ {weather.main.temp}°C,
+                                🌤️ {weather.weather[0].description}
                             </p>
                         </div>
                     )}
 
                     <Container maxWidth="md">
-                        {quote && <div>"{quote.content}" - {quote.author}</div>}
+                        {quote && <div style={{marginBottom: 50, color: '#fcb9aa', fontSize: 14, fontStyle: 'italic'}}>"{quote.content}" - {quote.author}</div>}
                         <AddTodo add={add} />
                         <StyledSelect
                             value={sortOrder}
