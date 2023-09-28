@@ -150,21 +150,50 @@ function App() {
         }
     };     
 
+    const translate = async (text) => {
+        try {
+            const response = await fetch("https://libretranslate.de/translate", {
+                method: "POST",
+                body: JSON.stringify({
+                    q: text,
+                    source: "en",
+                    target: "ko"
+                }),
+                headers: { "Content-Type": "application/json" }
+            });
+    
+            if (!response.ok) {
+                throw new Error("Translation failed");
+            }
+    
+            const data = await response.json();
+            return data.translatedText;
+        } catch (error) {
+            console.error("Failed to translate text", error);
+            return text;
+        }
+    };
+    
     const getRandomQuote = async () => {
         try {
             const response = await fetch("https://api.quotable.io/random");
     
             if (!response.ok) {
-                throw new Error("명언을 가져오는데 실패했습니다.");
+                throw new Error("Failed to fetch quote");
             }
     
             const data = await response.json();
-            setQuote(data);
+            const translatedContent = await translate(data.content);
+            
+            setQuote({
+                ...data,
+                content: translatedContent
+            });
     
         } catch (error) {
-            console.error("명언을 가져오는데 실패했습니다.", error);
+            console.error("Failed to fetch quote", error);
         }
-    };    
+    };      
 
     const Clock = () => {
         const [time, setTime] = useState(new Date());
@@ -293,10 +322,10 @@ function App() {
                         <div className="TodoList">
                             <Paper style={{ margin: 16 }}>
                                 <div style={{ margin: "20px 0" }}>
-                                    <Typography variant="body1" align="center">
-                                        진행도: {Math.round(calculateProgress())}%
-                                    </Typography>
                                     <LinearProgress variant="determinate" value={calculateProgress()} />
+                                    <Typography variant="body1" align="center">
+                                        {Math.round(calculateProgress())}%
+                                    </Typography>
                                 </div>
 
                                 <List>
