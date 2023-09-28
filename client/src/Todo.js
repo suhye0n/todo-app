@@ -1,6 +1,38 @@
 import React, { useState, useCallback } from 'react';
 import { Typography, ListItem, ListItemText, InputBase, Checkbox, ListItemSecondaryAction, IconButton } from "@material-ui/core";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
+import styled from 'styled-components';
+import TwemojiComponent from './TwemojiComponent';
+
+const ImportanceIndicator = styled.span`
+  display: inline-block;
+  width: 23px;
+  height: 22px;
+  padding: 5px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  
+  ${props => props.level === '상' && `
+    background: #ff968a;
+    color: white;
+  `}
+  
+  ${props => props.level === '중' && `
+    background: #ffd8be;
+    color: black;
+  `}
+  
+  ${props => props.level === '하' && `
+    background: #c6dbda;
+    color: white;
+  `}
+  
+  ${props => (!props.level || props.level === 'x') && `
+    background: #eee;
+  `}
+`;
 
 function Todo({ item: initialItem, delete: deleteTodo, update }) {
     const [item, setItem] = useState(initialItem);
@@ -51,15 +83,20 @@ function Todo({ item: initialItem, delete: deleteTodo, update }) {
                     onKeyPress={enterKeyEventHandler}
                 />
                 {item.deadline && (
-                  <Typography component="span" variant="body2" style={{ marginRight: '1rem' }}>
-                    마감일: {item.deadline}
-                  </Typography>
+                    <Typography component="span" variant="body2" style={{ marginRight: '1rem' }}>
+                        📅 {item.deadline}
+                    </Typography>
                 )}
-                <Typography component="span" variant="body2">
-                  중요도: {item.importance}
-                </Typography>
             </ListItemText>
             <ListItemSecondaryAction>
+                <Typography component="span" variant="body2">
+                    <ImportanceIndicator level={item.importance}>
+                        {item.importance === '상' && '!!!'}
+                        {item.importance === '중' && '!!'}
+                        {item.importance === '하' && '!'}
+                        {item.importance === 'x' && 'ㅤ'}
+                    </ImportanceIndicator>
+                </Typography>
                 <IconButton aria-label="Delete"
                     onClick={deleteEventHandler}>
                     <DeleteOutlined />

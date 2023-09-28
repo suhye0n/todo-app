@@ -27,7 +27,7 @@ function AddTodo({ add }) {
                 <Grid item xs={6} md={6}>
                     <TextField
                         name="title"
-                        placeholder="Add Todo here"
+                        placeholder="추가할 투두 제목 입력 😄"
                         fullWidth
                         onChange={onInputChange}
                         value={item.title}

@@ -72,6 +72,7 @@ export const signout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(username);
     localStorage.removeItem(email);
+    alert("로그아웃이 완료되었습니다.");
     window.location.href = "/";
 }
 

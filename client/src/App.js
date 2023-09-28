@@ -115,12 +115,12 @@ function App() {
             <Toolbar>
                 <Grid justifyContent="space-between" container>
                     <Grid item>
-                        <Typography variant="h6">오늘의 할일</Typography>
+                        <Typography variant="h6">✍오늘의 할일</Typography>
                     </Grid>
                     <Grid item>
                         <SearchContainer>
                             <StyledInputBase
-                                placeholder="Search…"
+                                placeholder="검색할 투두 제목 입력 🤔"
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                             />
@@ -128,8 +128,8 @@ function App() {
                         </SearchContainer>
                     </Grid>
                     <Grid item>
-                        <Button color="inherit" onClick={() => window.location.href = '/mypage'}>마이페이지</Button>
-                        <Button color="inherit" onClick={signout}>로그아웃</Button>
+                        <Button color="inherit" onClick={() => window.location.href = '/mypage'}>🧍마이페이지</Button>
+                        <Button color="inherit" onClick={signout}>👋로그아웃</Button>
                     </Grid>
                 </Grid>
             </Toolbar>
