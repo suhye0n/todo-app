@@ -298,17 +298,7 @@ function App() {
     useEffect(() => {
         const sortedData = sortData(items);
         setItems(sortedData);
-    }, [sortOrder]);
-
-    useEffect(() => {
-        const progress = calculateProgress();
-        if (progress === 100 && prevProgress !== 100) {
-            setTimeout(() => {
-                alert("축하합니다! 모든 할 일을 완료하셨습니다!");
-            }, 100);
-        }
-        setPrevProgress(progress);
-    }, [items]);        
+    }, [sortOrder]);        
 
     useEffect(() => {
         const storedUsername = localStorage.getItem('username');
