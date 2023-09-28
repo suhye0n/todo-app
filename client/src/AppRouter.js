@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Typography variant="body2" color="textSecondary" align="center" style={{marginTop: 30, marginBottom: 50}}>
             {"Copyright ⓒ "}
             suhye0n, {new Date().getFullYear()}
             {"."}
