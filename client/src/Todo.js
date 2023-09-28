@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { ListItem, ListItemText, InputBase, Checkbox, ListItemSecondaryAction, IconButton } from "@material-ui/core";
+import { Typography, ListItem, ListItemText, InputBase, Checkbox, ListItemSecondaryAction, IconButton } from "@material-ui/core";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 
 function Todo({ item: initialItem, delete: deleteTodo, update }) {
@@ -50,8 +50,15 @@ function Todo({ item: initialItem, delete: deleteTodo, update }) {
                     onChange={editEventHandler}
                     onKeyPress={enterKeyEventHandler}
                 />
+                {item.deadline && (
+                  <Typography component="span" variant="body2" style={{ marginRight: '1rem' }}>
+                    마감일: {item.deadline}
+                  </Typography>
+                )}
+                <Typography component="span" variant="body2">
+                  중요도: {item.importance}
+                </Typography>
             </ListItemText>
-
             <ListItemSecondaryAction>
                 <IconButton aria-label="Delete"
                     onClick={deleteEventHandler}>

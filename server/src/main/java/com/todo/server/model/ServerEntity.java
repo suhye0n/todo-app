@@ -1,5 +1,8 @@
 package com.todo.server.model;
 
+import java.time.LocalDate;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,4 +27,8 @@ public class ServerEntity {
 	private String userId;
 	private String title;
 	private boolean done;
+    @Column(nullable = true)
+    private LocalDate deadline; 
+    @Column(nullable = true)
+    private String importance;
 }
