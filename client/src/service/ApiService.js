@@ -37,6 +37,7 @@ export const signin = async userDTO => {
     const response = await call("/auth/signin", "POST", userDTO);
 
     if (response.token) {
+        alert('로그인을 성공하였습니다👋');
         localStorage.setItem(ACCESS_TOKEN, response.token);
         localStorage.setItem(username, response.username);
         localStorage.setItem(email, userDTO.email);
@@ -49,6 +50,7 @@ export const signup = async userDTO => {
         const response = await call("/auth/signup", "POST", userDTO);
 
         if (response.id) {
+            alert('회원가입을 성공하였습니다👋');
             window.location.href = "/login";
         }
     } catch (error) {
@@ -66,7 +68,7 @@ export const signout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(username);
     localStorage.removeItem(email);
-    alert("로그아웃이 완료되었습니다.");
+    alert("로그아웃이 완료되었습니다👋");
     window.location.href = "/";
 }
 
@@ -91,7 +93,7 @@ export const withdrawal = async userDTO => {
         }
     } catch (error) {
         console.error(error.status);
-        alert("회원 탈퇴를 실패하였습니다.");
+        alert("회원 탈퇴를 실패하였습니다🤔");
 
         if (error.status === 403) {
             window.location.href = "/login";
