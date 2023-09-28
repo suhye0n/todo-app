@@ -2,21 +2,64 @@ import React, { useEffect } from "react";
 import { signin } from "./service/ApiService";
 import { Button, TextField, Grid, Link, Container, Typography, AppBar, Toolbar } from "@material-ui/core";
 import styled from "styled-components";
+import { useDarkMode } from "./DarkModeContext";
 
 const StyledAppBar = styled(AppBar)`
+    && {
+    background-color: ${({ darkMode }) => darkMode ? "#333" : "#fff"};
+    color: ${({ darkMode }) => darkMode ? "#fff" : "#757575"};
+    position: fixed;
+    top: 0;
+    }
+`;
+
+const StyledTextField = styled(TextField)`
   && {
-    background-color: #fff;
-    color: #757575
+    .MuiOutlinedInput-root {
+      fieldset {
+        border-color: ${({ darkMode }) => darkMode ? "#aaa" : "#e0e0e0"};
+      }
+      &:hover fieldset {
+        border-color: ${({ darkMode }) => darkMode ? "#fff" : "#bdbdbd"};
+      }
+      &.Mui-focused fieldset {
+        border-color: ${({ darkMode }) => darkMode ? "#fff" : "#9e9e9e"};
+      }
+    }
+
+    .MuiFormLabel-root {
+      color: ${({ darkMode }) => darkMode ? "#aaa" : "#9e9e9e"};
+      &.Mui-focused {
+        color: ${({ darkMode }) => darkMode ? "#fff" : "#9e9e9e"};
+      }
+    }
+
+    .MuiInputBase-input {
+      color: ${({ darkMode }) => darkMode ? "#fff" : "#333"};
+    }
+
+    .MuiInputBase-input::placeholder {
+        color: ${({ darkMode }) => darkMode ? "#fff" : "#333"};
+    }
   }
 `;
 
 function Login() {
+    const { darkMode, setDarkMode } = useDarkMode();
+
     const navigationBar = (
-        <StyledAppBar position="static">
+        <StyledAppBar darkMode={darkMode} position="static">
             <Toolbar>
                 <Grid justifyContent="space-between" container>
                     <Grid item>
                         <Typography variant="h6" onClick={() => window.location.href = '/'} style={{ cursor: "pointer" }}>✍오늘의 할일</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Button color="inherit" onClick={() => setDarkMode(!darkMode)}>
+                            {darkMode ? "☀️ 라이트모드" : "🌙 다크모드"}
+                        </Button>
+                        <Button color="inherit" onClick={() => window.location.href = '/login'}>🧍로그인</Button>
+                        <Button color="inherit" onClick={() => window.location.href = '/signup'}>🧍회원가입</Button>
                     </Grid>
                 </Grid>
             </Toolbar>
@@ -57,7 +100,8 @@ function Login() {
                 <form noValidate onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <TextField
+                            <StyledTextField
+                                darkMode={darkMode}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -68,7 +112,8 @@ function Login() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
+                            <StyledTextField
+                                darkMode={darkMode}
                                 type="password"
                                 variant="outlined"
                                 required
