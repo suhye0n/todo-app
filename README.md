@@ -37,7 +37,7 @@
 
 2. **로그인 기능**
 - 이메일 및 비밀번호를 입력하여 로그인 가능
-![image](https://github.com/suhye0n/todo-app/assets/63187994/e4f23d0d-65fc-41c9-b15d-c7d7989d683e)
+![image](https://github.com/suhye0n/todo-app/assets/63187994/ab2a45ca-c07d-4b3e-a517-50224714f2aa)
 
 3. **메인페이지**
 - 랜덤 명언 API 활용
@@ -57,5 +57,4 @@
 - 로그아웃 가능
 - 마이페이지 이동 가능
 - 메인페이지 이동 가능
-![image](https://github.com/suhye0n/todo-app/assets/63187994/b105b3c9-0f50-48e2-88e3-282683d9a257)
-![image](https://github.com/suhye0n/todo-app/assets/63187994/2361a030-e527-409d-bc94-fa49024c0e3f)
+![image](https://github.com/suhye0n/todo-app/assets/63187994/a7e43e26-d59f-40c3-a617-be703ff325f8)
