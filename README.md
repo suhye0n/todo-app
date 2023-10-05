@@ -1,5 +1,5 @@
 # 오늘의 할일 todo-app
-(영상 링크)[https://youtu.be/b0yxzv0zliU]
+[https://youtu.be/b0yxzv0zliU](https://youtu.be/b0yxzv0zliU)
 
 ## 개요
 - 중요도와 마감일 별로 관리할 수 있는 투두리스트 웹사이트를 개발하였습니다.
