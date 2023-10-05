@@ -33,11 +33,11 @@
 1. **회원가입 기능**
 - 사용자 이름과 이메일 및 비밀번호를 입력하여 회원가입 가능
 - 중복된 이메일로 회원가입 불가
-![image](https://github.com/suhye0n/todo-app/assets/63187994/c9d07afa-5781-4dd0-a3f3-77750bbf0cf4)
+![image](https://github.com/suhye0n/todo-app/assets/63187994/a15a33ff-6b42-4c95-bd43-9a74ddf16f02)
 
 2. **로그인 기능**
 - 이메일 및 비밀번호를 입력하여 로그인 가능
-![image](https://github.com/suhye0n/todo-app/assets/63187994/99b40c8f-a2ce-4837-8817-a7614b9e7205)
+![image](https://github.com/suhye0n/todo-app/assets/63187994/e4f23d0d-65fc-41c9-b15d-c7d7989d683e)
 
 3. **메인페이지**
 - 랜덤 명언 API 활용
