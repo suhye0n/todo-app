@@ -49,14 +49,9 @@ const StyledTextField = styled(TextField)`
 function MyPage() {
     const { darkMode, setDarkMode } = useDarkMode();
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handlePasswordVisibility = () => {
         setShowPassword(!showPassword);
-    };
-
-    const handleConfirmPasswordVisibility = () => {
-        setShowConfirmPassword(!showConfirmPassword);
     };
 
     useEffect(() => {
