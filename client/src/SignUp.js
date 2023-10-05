@@ -67,7 +67,8 @@ function SignUp() {
 
         emailjs.send('service_6ivehyn', 'template_gu4akws', templateParams, '3YYSEIx_1W94_6PHN')
             .then((response) => {
-                console.log('Email sent successfully!', response.status, response.text);
+                alert('인증코드를 전송했습니다. 메일함을 확인해주세요.');
+                console.log('인증코드 전송 성공!', response.status, response.text);
                 localStorage.setItem('verificationCode', verificationCode);
                 setShowVerificationInput(true);
             }, (error) => {
@@ -125,7 +126,7 @@ function SignUp() {
         try {
             await signup({ email, username, password })
         } catch (error) {
-            alert("회원가입에 실패하였습니다.");
+            alert("회원가입에 실패했습니다.");
         }
     };
 
