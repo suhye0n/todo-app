@@ -33,7 +33,7 @@
 1. **회원가입 기능**
 - 사용자 이름과 이메일 및 비밀번호를 입력하여 회원가입 가능
 - 중복된 이메일로 회원가입 불가
-![image](https://github.com/suhye0n/todo-app/assets/63187994/a15a33ff-6b42-4c95-bd43-9a74ddf16f02)
+![image](https://github.com/suhye0n/todo-app/assets/63187994/354c5e24-db6f-4bd5-945e-d9c533e52bc4)
 
 2. **로그인 기능**
 - 이메일 및 비밀번호를 입력하여 로그인 가능
@@ -44,19 +44,13 @@
 - 날씨 API 활용
 - 시각 표시 기능
 - 할일 추가/수정/삭제/검색/정렬 기능
-![image](https://github.com/suhye0n/todo-app/assets/63187994/fdad8a52-2088-4481-b5b2-18e2bb4e2713)
-![image](https://github.com/suhye0n/todo-app/assets/63187994/7d8e492b-b0bc-4e04-827e-bb8fe60742fb)
-![image](https://github.com/suhye0n/todo-app/assets/63187994/14710eb8-42ba-4c7e-8dee-a285847f2890)
-![image](https://github.com/suhye0n/todo-app/assets/63187994/c41157d0-8a8f-4220-a7a5-22ae38b1ff91)
-![image](https://github.com/suhye0n/todo-app/assets/63187994/46a34716-bb8b-4741-bd4f-2eda1ab2e84f)
-![image](https://github.com/suhye0n/todo-app/assets/63187994/b095f0dd-ae97-4202-8bed-136ec3925495)
+![image](https://github.com/suhye0n/todo-app/assets/63187994/02612cbe-7d1f-4ea7-9fbe-49e721ecdd74)
+![image](https://github.com/suhye0n/todo-app/assets/63187994/14462da4-358b-437b-b3b8-b17e2b00ceb0)
 
 4. **마이페이지**
 - 회원정보 수정 가능
 - 회원 탈퇴 가능
-![image](https://github.com/suhye0n/todo-app/assets/63187994/968ed6e0-b408-43d9-bc74-5377a38f3236)
-![image](https://github.com/suhye0n/todo-app/assets/63187994/f358f9af-41fd-466c-84f1-b64a17a93cec)
-![image](https://github.com/suhye0n/todo-app/assets/63187994/8f91c54a-bfd4-41d1-920c-f14c53c38376)
+![image](https://github.com/suhye0n/todo-app/assets/63187994/e8023de8-932c-4f8a-9cfb-407bd15e9766)
 
 5. **상단바**
 - 다크모드/라이트모드 전환 가능
